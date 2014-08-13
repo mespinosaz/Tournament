@@ -95,12 +95,17 @@ public class CombatTree {
 	public Fighter solveCombat(Fighter f1, Fighter f2) {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		int x=0;
-		if (f1.type == 0) return f2;
-		if (f2.type == 0) return f1;
-		if (f1.type == 2 && f2.type == 2) return autoCombat(f1,f2);
+		if (f1.getType() == 0) return f2;
+		if (f2.getType() == 0) return f1;
+		if (f1.getType() == 2 && f2.getType() == 2) return autoCombat(f1,f2);
 		try {
 			do {
-				 System.out.print(f1.name + "(" + f1.wfactor + ") vs. " + f2.name + "(" + f2.wfactor + ")\n[ 1. " + f1.name + " | 2. " + f2.name + " | 3.Auto ]: ");
+				System.out.print("\n-----------------------\n" 
+					+ f1.getName() + "(" + String.valueOf(f1.getDifficulty())
+					+ ") vs. " 
+					+ f2.getName() + "(" + String.valueOf(f2.getDifficulty()) 
+					+ ")\n-----------------------\n[ 1. " +  f1.getName() + " | 2. " + f2.getName() + " | 3.Auto ]: ");
+
 				switch(Integer.parseInt(in.readLine())) {
 					case 1: return f1;
 					case 2: return f2;
@@ -115,12 +120,12 @@ public class CombatTree {
 	}
 
 	public Fighter autoCombat(Fighter f1, Fighter f2) {
-		if (f1.type == 0) return f2;
-                if (f2.type == 0) return f1;
-		int wftotal = f1.wfactor + f2.wfactor;
+		if (f1.getType() == 0) return f2;
+      	if (f2.getType() == 0) return f1;
+		int totalDifficulty = f1.getDifficulty() + f2.getDifficulty();
 		Random rand = new Random();
-		int x = rand.nextInt(wftotal);
-		if (x < f1.wfactor) return f1;
+		int result = rand.nextInt(totalDifficulty);
+		if (result < f1.getDifficulty()) return f1;
 		return f2;
 	}
 }

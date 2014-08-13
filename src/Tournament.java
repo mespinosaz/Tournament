@@ -80,7 +80,7 @@ public class Tournament {
 		String msg = "";
 		switch (option) {
 			case 1:
-				while (ct.fighter.type == 0) {
+				while (ct.fighter.getType() == 0) {
 					if (ct.c1.isLeaf() && ct.c2.isLeaf()) msg = "Final Round";
 					else msg = "Round " + round;
 					titulo(msg);		
@@ -95,7 +95,7 @@ public class Tournament {
 				break;
 		}
 		System.out.print("\n\n");
-		slowText("The winner is........................... " + winner.name.toUpperCase() + "!!!!!!");
+		slowText("The winner is........................... " + winner.getName().toUpperCase() + "!!!!!!");
 	}
 
 	public void titulo(String text) {

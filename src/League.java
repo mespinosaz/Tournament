@@ -38,13 +38,13 @@ public class League {
 			System.out.println("Ronda" + Integer.toString(i+1));
 			System.out.print("----------");
 			Collections.shuffle(clist);
-			for(int j=0;j<clist.size();j++) fighters.get(fighters.indexOf(clist.get(j).solveCombat())).wins++;
+			for(int j=0;j<clist.size();j++) fighters.get(fighters.indexOf(clist.get(j).solveCombat())).addWin();
 		}
 		winSort(fighters,0,fighters.size()-1);
 		Collections.reverse(fighters);
 		winner = fighters.get(0);
 		System.out.println("\n----\nWins\n----");
-		for(int n=0;n<fighters.size();n++) System.out.println(Integer.toString(n+1) + ". " + fighters.get(n).name + " - " + fighters.get(n).wins);
+		for(int n=0;n<fighters.size();n++) System.out.println(Integer.toString(n+1) + ". " + fighters.get(n).getName() + " - " + fighters.get(n).getWins());
 		System.out.println("----------");
 	}
 
@@ -55,12 +55,12 @@ public class League {
 	public void winSort(ArrayList<Fighter> f, int first, int last){
     	int i=first;
 		int j=last;
-    	int pivote=(f.get(last).wins+f.get(first).wins)/2;
+    	int pivote=(f.get(last).getWins()+f.get(first).getWins())/2;
     	Fighter aux;
  
     	do{
-    		while(f.get(i).wins<pivote) i++;    		
-    		while(f.get(j).wins>pivote) j--;
+    		while(f.get(i).getWins()<pivote) i++;    		
+    		while(f.get(j).getWins()>pivote) j--;
  
     		if (i<=j){
     			aux=f.get(j);
