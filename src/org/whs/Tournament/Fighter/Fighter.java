@@ -9,11 +9,11 @@ public class Fighter {
 	public static final int FIGHTER_TYPE_HUMAN = 1;
 	public static final int FIGHTER_TYPE_BOT = 2;
 
-	private String name;
-	private int difficulty;
-	private int type;
-	private int wins;
-	private int loses;
+	protected String name;
+	protected int difficulty;
+	protected int type;
+	protected int wins;
+	protected int loses;
 
 	public Fighter(String name) {
 		this.name = name;
@@ -33,6 +33,8 @@ public class Fighter {
 		this.name = "";
 		this.difficulty = 0;
 	}
+
+
 
 	public String getName() {
 		return this.name;

@@ -1,6 +1,8 @@
 package org.whs.Tournament;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.HumanFighter;
+import org.whs.Tournament.Fighter.RandomBot;
 import org.whs.Tournament.Structure.TournamentStructure;
 import org.whs.Tournament.Structure.CombatTree;
 import org.whs.Tournament.Structure.League;
@@ -58,16 +60,14 @@ public class Tournament {
 		addRandomBots(spotsLeft);
 	}
 
-	private void addRandomBots(int spotsLeft) {
-		for (int i=1;i<=spotsLeft;i++) {
+	private void addRandomBots(int numberOfBots) {
+		for (int i=1;i<=numberOfBots;i++) {
 			addRandomBot(i);
 		}
 	}
 
 	private void addRandomBot(int id) {
-		Random rand = new Random();
-		int botLevel = rand.nextInt(5) + 1;
-		Fighter bot = new Fighter(id,botLevel);
+		RandomBot bot = new RandomBot(id);
 		addParticipant(bot);
 	}
 
@@ -104,7 +104,7 @@ public class Tournament {
 			+ Integer.toString(id)
 		);
 		String name = input.captureString();
-		Fighter newFighter = new Fighter(name);
+		Fighter newFighter = new HumanFighter(name);
 		addParticipant(newFighter);
 	}
 
