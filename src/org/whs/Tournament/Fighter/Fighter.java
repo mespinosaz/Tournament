@@ -15,19 +15,6 @@ public class Fighter {
 	protected int wins;
 	protected int loses;
 
-	public Fighter(String name) {
-		this.name = name;
-		this.difficulty = Fighter.DEFAULT_DIFFICULTY;
-		this.type = Fighter.FIGHTER_TYPE_HUMAN;
-	}
-
-	public Fighter(int id, int difficulty) {
-		this.name = "CPU" + Integer.toString(id);
-		Random rand = new Random();
-		this.difficulty = difficulty*20 + rand.nextInt(20) - 10;
-		this.type = Fighter.FIGHTER_TYPE_BOT;
-	}
-
 	public Fighter() {
 		this.type = Fighter.FIGHTER_TYPE_EMPTY;
 		this.name = "";
