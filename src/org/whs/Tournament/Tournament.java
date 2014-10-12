@@ -28,8 +28,7 @@ public class Tournament {
 	int numberOfHumanPlayers = 0;
 	int tournamentType;
 	TournamentStructure tournament;
-	Fighter winner;
-	int option;
+
 	public static void main(String[] args) {
 		new Tournament();
 	}
