@@ -1,3 +1,10 @@
+package org.whs.Tournament;
+
+import org.whs.Tournament.Structure.Combat.Fighter.Fighter;
+import org.whs.Tournament.Structure.CombatTree;
+import org.whs.Tournament.Structure.League;
+
+
 import java.net.*;
 import java.io.*;
 import java.lang.*;
@@ -19,7 +26,7 @@ public class Tournament {
 		start();
 		begin();
 	}
-	
+
 	public void init() {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		int h=0,d;
@@ -74,7 +81,7 @@ public class Tournament {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void begin() {
 		int round = 1;
 		String msg = "";
@@ -83,7 +90,7 @@ public class Tournament {
 				while (ct.fighter.getType() == 0) {
 					if (ct.c1.isLeaf() && ct.c2.isLeaf()) msg = "Final Round";
 					else msg = "Round " + round;
-					titulo(msg);		
+					titulo(msg);
 					ct.solveLeafCombats();
 					round++;
 				}

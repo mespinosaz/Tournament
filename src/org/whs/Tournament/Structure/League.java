@@ -1,7 +1,13 @@
+package org.whs.Tournament.Structure;
+
+import org.whs.Tournament.Structure.Combat.Fighter.Fighter;
+import org.whs.Tournament.Structure.Combat.Combat;
+
 import java.net.*;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+
 
 public class League {
 	ArrayList<Fighter> fighters;
@@ -57,11 +63,11 @@ public class League {
 		int j=last;
     	int pivote=(f.get(last).getWins()+f.get(first).getWins())/2;
     	Fighter aux;
- 
+
     	do{
-    		while(f.get(i).getWins()<pivote) i++;    		
+    		while(f.get(i).getWins()<pivote) i++;
     		while(f.get(j).getWins()>pivote) j--;
- 
+
     		if (i<=j){
     			aux=f.get(j);
 				f.set(j,f.get(i));
@@ -69,9 +75,9 @@ public class League {
     			i++;
     			j--;
     		}
- 
+
     	} while (i<=j);
- 
+
     	if(first<j) winSort(f,first, j);
     	if(last>i) winSort(f,i, last);
    }
