@@ -11,8 +11,6 @@ import org.whs.Tournament.Util.UserInputReader;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
-
 
 public class Tournament {
 	public static final String NUMBER_OF_PARTICIPANTS_INPUT_MESSAGE = "Number of participants";
