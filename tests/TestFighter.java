@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.whs.Tournament.Combat.Fighter.Fighter;
+import org.whs.Tournament.Structure.Combat.Fighter.Fighter;
 
 public class TestFighter {
     @Test

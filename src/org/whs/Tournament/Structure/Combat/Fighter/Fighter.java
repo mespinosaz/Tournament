@@ -1,9 +1,6 @@
 package org.whs.Tournament.Structure.Combat.Fighter;
 
-import java.net.*;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.util.Random;
 
 public class Fighter {
 	public static final int DEFAULT_DIFFICULTY = 75;
