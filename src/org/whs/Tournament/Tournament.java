@@ -16,10 +16,10 @@ public class Tournament {
 	public static final String NUMBER_OF_PARTICIPANTS_INPUT_MESSAGE = "Number of participants";
 	public static final String NUMBER_OF_PLAYERS_INPUT_MESSAGE = "Number of players";
 	public static final String NAME_OF_PLAYER_INPUT_MESSAGE = "Name of player";
-	public static final String TOURNAMENT_TYPE_INPUT_MESSAGE = "\nTipo\n"
+	public static final String TOURNAMENT_TYPE_INPUT_MESSAGE = "Type\n"
 				+ "----\n"
-				+ "1. Torneo\n"
-				+ "2. Liga\n"
+				+ "1. Tournament Tree\n"
+				+ "2. League\n"
 				+ "---------\n"
 				+ "<1/2>";
 
