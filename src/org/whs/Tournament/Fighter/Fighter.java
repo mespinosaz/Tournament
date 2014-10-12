@@ -1,4 +1,4 @@
-package org.whs.Tournament.Structure.Combat.Fighter;
+package org.whs.Tournament.Fighter;
 
 import java.util.Random;
 

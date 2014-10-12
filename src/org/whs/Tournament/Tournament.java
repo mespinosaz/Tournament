@@ -1,6 +1,6 @@
 package org.whs.Tournament;
 
-import org.whs.Tournament.Structure.Combat.Fighter.Fighter;
+import org.whs.Tournament.Fighter.Fighter;
 import org.whs.Tournament.Structure.CombatTree;
 import org.whs.Tournament.Structure.League;
 

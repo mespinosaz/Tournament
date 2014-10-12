@@ -1,6 +1,6 @@
 package org.whs.Tournament.Structure;
 
-import org.whs.Tournament.Structure.Combat.Fighter.Fighter;
+import org.whs.Tournament.Fighter.Fighter;
 import org.whs.Tournament.Structure.Combat.Combat;
 
 import java.net.*;
