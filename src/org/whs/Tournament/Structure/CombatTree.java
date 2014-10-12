@@ -7,45 +7,71 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 
-public class CombatTree {
+public class CombatTree extends TournamentStructure {
 	public Fighter fighter = new Fighter();
-	public CombatTree c1 = null;
-	public CombatTree c2 = null;
+	int maxDepth = 0;
+	public CombatTree leftLeaf = null;
+	public CombatTree rightLeaf = null;
 	int label = 0;
+
 	public CombatTree() {
+
 	}
 
-	public CombatTree(int nivel, int l) {
-		if (nivel > 0) {
-			c1 = new CombatTree(nivel-1,l);
-			c2 = new CombatTree(nivel-1,l + (int) Math.pow(2,nivel)/2);
+	public CombatTree(int depth) {
+		initialize(depth,1);
+	}
+
+	public CombatTree(int depth, int horitzonalPosition) {
+		initialize(depth,horitzonalPosition);
+	}
+
+	private void initialize (int depth, int horitzonalPosition) {
+		maxDepth = depth;
+		if (depth > 0) {
+			leftLeaf = new CombatTree(depth-1,horitzonalPosition);
+			rightLeaf = new CombatTree(depth-1,horitzonalPosition + (int) Math.pow(2,depth)/2);
 		} else {
-			label = l;
+			label = horitzonalPosition;
 		}
 	}
 
-	public CombatTree initialize(ArrayList<Fighter> flist) {
+	public static int computeDepth(int numberOfNodes) {
+		return (int)Math.ceil( Math.log(numberOfNodes) / Math.log(2) );
+	}
+
+	public void addParticipants(ArrayList<Fighter> participants) {
+		participants.ensureCapacity((int)Math.pow(2,maxDepth));
+		int numberOfParticipants = participants.size();
+		for (int i=0; i < ((int)Math.pow(2,maxDepth) - numberOfParticipants); i++) {
+			participants.add(new Fighter());
+		}
+		addNodes(participants);
+		reverse();
+	}
+
+	public CombatTree addNodes(ArrayList<Fighter> flist) {
 		int index=0;
 		if (isLeaf()) return null;
-		if (c1.isLeaf() && c2.isLeaf()) {
-			index = (c1.label-1)/2;
-			c1.fighter = flist.get(index);
-			c2.fighter = flist.get(index + flist.size()/2);
+		if (leftLeaf.isLeaf() && rightLeaf.isLeaf()) {
+			index = (leftLeaf.label-1)/2;
+			leftLeaf.fighter = flist.get(index);
+			rightLeaf.fighter = flist.get(index + flist.size()/2);
 		} else {
-			c1 = c1.initialize(flist);
-			c2 = c2.initialize(flist);
+			leftLeaf = leftLeaf.addNodes(flist);
+			rightLeaf = rightLeaf.addNodes(flist);
 		}
 
 		return this;
 	}
 
 	public int addNode(CombatTree c) {
-		if (c1 == null) {
-			c1 = c;
+		if (leftLeaf == null) {
+			leftLeaf = c;
 			return 1;
 		}
-		if (c2 == null) {
-			c2 = c;
+		if (rightLeaf == null) {
+			rightLeaf = c;
 			return 2;
 		}
 		return -1;
@@ -53,46 +79,61 @@ public class CombatTree {
 
 	public void addNode(CombatTree c, int i) {
 		switch(i) {
-			case 1: c1 = c; break;
-			case 2: c2 = c; break;
+			case 1: leftLeaf = c; break;
+			case 2: rightLeaf = c; break;
 		}
 	}
 
 	public CombatTree reverse() {
-		CombatTree aux = c1;
+		CombatTree aux = leftLeaf;
 		if (!isLeaf()) {
-			c1 = c2;
-			c2 = aux;
-			c1.reverse();
-			c2.reverse();
+			leftLeaf = rightLeaf;
+			rightLeaf = aux;
+			leftLeaf.reverse();
+			rightLeaf.reverse();
 		}
 		return this;
 
 	}
 
 	public boolean isLeaf() {
-		if (c1 == null & c2 == null) return true;
+		if (leftLeaf == null & rightLeaf == null) return true;
 		return false;
 	}
 
 	public Fighter returnFighter() { //Deprecated
 		Fighter a1, a2;
-		if (c1.isLeaf()) a1 = c1.fighter;
-		else a1 = c1.returnFighter();
-		if (c2.isLeaf()) a2 = c2.fighter;
-		else a2 = c2.returnFighter();
+		if (leftLeaf.isLeaf()) a1 = leftLeaf.fighter;
+		else a1 = leftLeaf.returnFighter();
+		if (rightLeaf.isLeaf()) a2 = rightLeaf.fighter;
+		else a2 = rightLeaf.returnFighter();
 		return solveCombat(a1,a2);
 	}
 
+	public void resolve() {
+		int round = 1;
+		while (this.fighter.getType() == 0) {
+			String msg = "";
+			if (this.leftLeaf.isLeaf() && this.rightLeaf.isLeaf()) msg = "Final Round";
+			else msg = "Round " + round;
+			this.consoleOutput.title(msg);
+			this.solveLeafCombats();
+			round++;
+		}
+	}
+
+	public Fighter getWinner() {
+		return this.fighter;
+	}
 
 	public void solveLeafCombats() {
-		if (c1.isLeaf() && c2.isLeaf()) {
-			fighter = solveCombat(c1.fighter,c2.fighter);
-			c1 = null;
-			c2 = null;
+		if (leftLeaf.isLeaf() && rightLeaf.isLeaf()) {
+			fighter = solveCombat(leftLeaf.fighter,rightLeaf.fighter);
+			leftLeaf = null;
+			rightLeaf = null;
 		} else {
-			c1.solveLeafCombats();
-			c2.solveLeafCombats();
+			leftLeaf.solveLeafCombats();
+			rightLeaf.solveLeafCombats();
 		}
 	}
 

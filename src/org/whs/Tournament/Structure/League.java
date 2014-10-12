@@ -9,16 +9,20 @@ import java.lang.*;
 import java.util.*;
 
 
-public class League {
+public class League extends TournamentStructure {
 	ArrayList<Fighter> fighters;
 	Fighter winner;
 	int rounds = 1;
 
-	public League(ArrayList<Fighter> flist) {
-		fighters = flist;
+	public League(ArrayList<Fighter> participants) {
+		fighters = participants;
 	}
 
-	public void start() {
+    public void addParticipants(ArrayList<Fighter> participants) {
+        fighters = participants;
+    }
+
+	public void resolve() {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		ArrayList<Combat> clist = new ArrayList<Combat>();
 		for (int i=0;i<fighters.size();i++) {
