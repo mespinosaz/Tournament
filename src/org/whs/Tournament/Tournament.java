@@ -16,6 +16,8 @@ public class Tournament {
 	public static final String NUMBER_OF_PARTICIPANTS_INPUT_MESSAGE = "Number of participants";
 	public static final String NUMBER_OF_PLAYERS_INPUT_MESSAGE = "Number of players";
 	public static final String NAME_OF_PLAYER_INPUT_MESSAGE = "Name of player";
+	public static final int OPTION_COMBAT_TREE = 1;
+	public static final int OPTION_LEAGUE = 2;
 	public static final String TOURNAMENT_TYPE_INPUT_MESSAGE = "\nType\n"
 				+ "----\n"
 				+ "1. Tournament Tree\n"
@@ -24,10 +26,10 @@ public class Tournament {
 				+ "<1/2>";
 
 	private ArrayList<Fighter> participants = new ArrayList<Fighter>();
-	int numberOfParticipants = 0;
-	int numberOfHumanPlayers = 0;
-	int tournamentType;
-	TournamentStructure tournament;
+	private int numberOfParticipants = 0;
+	private int numberOfHumanPlayers = 0;
+	private int tournamentType;
+	private TournamentStructure tournament;
 
 	public static void main(String[] args) {
 		new Tournament();
@@ -83,6 +85,7 @@ public class Tournament {
 		UserInputReader input = getUserInput(Tournament.NUMBER_OF_PLAYERS_INPUT_MESSAGE);
 		numberOfHumanPlayers = input.captureInteger();
 	}
+
 	private void processNumberOfHumanPlayers() {
 		do {
 			captureNumberOfHumanPlayers();
@@ -113,17 +116,16 @@ public class Tournament {
 	private UserInputReader getUserInput(String message) {
 		UserInputReader input = new UserInputReader(message);
 		input.setMessagePrepend(": ");
-
 		return input;
 	}
 
 	private void setupTournament() {
 		processTournamentType();
 		switch(tournamentType) {
-			case 1:
+			case Tournament.OPTION_COMBAT_TREE:
 				setupCombatTree();
 				break;
-			case 2:
+			case Tournament.OPTION_LEAGUE:
 				setupLeague();
 				break;
 		}
