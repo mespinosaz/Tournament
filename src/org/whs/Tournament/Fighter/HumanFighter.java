@@ -9,6 +9,4 @@ public class HumanFighter extends Fighter {
     public int getType() {
         return Fighter.FIGHTER_TYPE_HUMAN;
     }
-
-
 }

@@ -2,33 +2,23 @@ package org.whs.Tournament.Fighter;
 
 import java.util.Random;
 
-public class Fighter {
+abstract public class Fighter {
 	public static final int DEFAULT_DIFFICULTY = 75;
 
 	public static final int FIGHTER_TYPE_EMPTY = 0;
 	public static final int FIGHTER_TYPE_HUMAN = 1;
 	public static final int FIGHTER_TYPE_BOT = 2;
 
+	public static final String FIGHTER_NAME = "Name";
+	public static final String FIGHTER_DIFFICULTY = "Difficulty";
+
 	protected String name;
 	protected int difficulty;
-	protected int type;
 	protected int wins;
 	protected int loses;
 
-	public Fighter() {
-		this.type = Fighter.FIGHTER_TYPE_EMPTY;
-		this.name = "";
-		this.difficulty = 0;
-	}
-
-
-
 	public String getName() {
 		return this.name;
-	}
-
-	public int getType() {
-		return this.type;
 	}
 
 	public int getDifficulty() {
@@ -52,8 +42,10 @@ public class Fighter {
 	}
 
 	public void print() {
-		System.out.println("Nombre:\t " + this.name );
-		System.out.println("Dificultad:\t " + String.valueOf(getDifficulty()) + "\n");
+		System.out.println(Fighter.FIGHTER_NAME + ":\t " + this.name );
+		System.out.println(Fighter.FIGHTER_DIFFICULTY + ":\t " + String.valueOf(getDifficulty()) + "\n");
 	}
+
+	abstract public int getType();
 
 }
