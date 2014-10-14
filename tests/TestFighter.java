@@ -7,12 +7,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.whs.Tournament.Fighter.Bot;
 import org.whs.Tournament.Fighter.Fighter;
 import org.whs.Tournament.Fighter.HumanFighter;
+import org.whs.Tournament.Fighter.NullFighter;
 import org.whs.Tournament.Fighter.RandomBot;
 
 public class TestFighter {
     @Test
     public void testClass() {
-        Fighter f = new Fighter();
+        Fighter f = new NullFighter();
         assertThat(f, instanceOf(Fighter.class));
     }
 
@@ -29,7 +30,7 @@ public class TestFighter {
         Fighter f = new HumanFighter(name);
         assertEquals(Fighter.FIGHTER_TYPE_HUMAN,f.getType());
 
-        f = new Fighter();
+        f = new NullFighter();
         assertEquals(Fighter.FIGHTER_TYPE_EMPTY,f.getType());
 
         f = new Bot(1,1);
