@@ -84,8 +84,14 @@ public class CombatTree extends TournamentStructure {
 
 	private void setupLeafsFighters(ArrayList<Fighter> participants) {
 		int index = (leftLeaf.label-1)/2;
-		leftLeaf.fighter = participants.get(index);
-		rightLeaf.fighter = participants.get(index + participants.size()/2);
+		Fighter leftFighter = participants.get(index);
+		Fighter rightFighter = participants.get(index + participants.size()/2);
+		leftLeaf.setFighter(leftFighter);
+		rightLeaf.setFighter(rightFighter);
+	}
+
+	public void setFighter(Fighter theFighter) {
+		fighter = theFighter;
 	}
 
 	private void propagateParticipants(ArrayList<Fighter> participants) {
