@@ -7,10 +7,6 @@ import org.whs.Tournament.Util.UserInputReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-
 public class League extends TournamentStructure {
     public static final int EVEN_ROUND = 0;
     public static final int ODD_ROUND = 1;
