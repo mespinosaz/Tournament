@@ -15,7 +15,7 @@ public class TestCombatTree {
     @Test
     public void testTournament() {
         ArrayList<Fighter> participants = new ArrayList<Fighter>();
-        for(int i=0;i<5;i++) {
+        for(int i=0;i<11;i++) {
             Fighter f = new RandomBot(i);
             participants.add(f);
         }

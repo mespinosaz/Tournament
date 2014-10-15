@@ -58,6 +58,12 @@ public class CombatTree extends TournamentStructure {
 
 	private ArrayList<Fighter> normalizeParticipants(ArrayList<Fighter> participants) {
 		participants.ensureCapacity((int)Math.pow(2,maxDepth));
+		participants = fillSpotsWithEmptyValues(participants);
+
+		return participants;
+	}
+
+	private ArrayList<Fighter> fillSpotsWithEmptyValues(ArrayList<Fighter> participants) {
 		int numberOfParticipants = participants.size();
 		for (int i=0; i < ((int)Math.pow(2,maxDepth) - numberOfParticipants); i++) {
 			participants.add(new NullFighter());
@@ -132,9 +138,13 @@ public class CombatTree extends TournamentStructure {
 	}
 
 	private void resolveRound(int round) {
+		printRoundMessage(round);
+		solveLeafCombats();
+	}
+
+	private void printRoundMessage(int round) {
 		String msg = getRoundMessage(round);
 		consoleOutput.title(msg);
-		solveLeafCombats();
 	}
 
 	private boolean noOneWon() {
