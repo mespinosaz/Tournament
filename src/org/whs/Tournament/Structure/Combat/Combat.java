@@ -13,23 +13,23 @@ public class Combat
 	private Fighter fighter1;
 	private Fighter fighter2;
 
-	public Combat(Fighter fighter1, Fighter fighter2)
+	public Combat(Fighter newFighter1, Fighter newFighter2)
 	{
-		this.fighter1 = fighter1;
-		this.fighter2 = fighter2;
+		fighter1 = newFighter1;
+		fighter2 = newFighter2;
 	}
 
-	public Fighter solveCombat()
+	public Fighter resolve()
 	{
-		if (this.fighter1.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
-			return this.fighter2;
+		if (fighter1.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
+			return fighter2;
 		}
 
-		if (this.fighter2.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
-			return this.fighter1;
+		if (fighter2.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
+			return fighter1;
 		}
-		if (this.fighter1.getType() == Fighter.FIGHTER_TYPE_BOT
-			&& this.fighter2.getType() == Fighter.FIGHTER_TYPE_BOT) {
+		if (fighter1.getType() == Fighter.FIGHTER_TYPE_BOT
+			&& fighter2.getType() == Fighter.FIGHTER_TYPE_BOT) {
 			return autoCombat();
 		}
 
@@ -40,14 +40,14 @@ public class Combat
 			do {
 
 				System.out.print("\n-----------------------\n"
-					+ this.fighter1.getName() + "(" + String.valueOf(this.fighter1.getDifficulty())
+					+ fighter1.getName() + "(" + String.valueOf(fighter1.getDifficulty())
 					+ ") vs. "
-					+ this.fighter2.getName() + "(" + String.valueOf(this.fighter2.getDifficulty())
-					+ ")\n-----------------------\n[ 1. " +  this.fighter1.getName() + " | 2. " + this.fighter2.getName() + " | 3.Auto ]: ");
+					+ fighter2.getName() + "(" + String.valueOf(fighter2.getDifficulty())
+					+ ")\n-----------------------\n[ 1. " +  fighter1.getName() + " | 2. " + fighter2.getName() + " | 3.Auto ]: ");
 
 				switch(Integer.parseInt(in.readLine())) {
-					case 1: return this.fighter1;
-					case 2: return this.fighter2;
+					case 1: return fighter1;
+					case 2: return fighter2;
 					case 3: return autoCombat();
 				}
 			}
@@ -59,13 +59,13 @@ public class Combat
 	}
 
 	public Fighter autoCombat() {
-		if (this.fighter1.getType() == 0) return this.fighter2;
-      	if (this.fighter2.getType() == 0) return this.fighter1;
-		int totalDifficulty = this.fighter1.getDifficulty() + this.fighter2.getDifficulty();
+		if (fighter1.getType() == 0) return fighter2;
+      	if (fighter2.getType() == 0) return fighter1;
+		int totalDifficulty = fighter1.getDifficulty() + fighter2.getDifficulty();
 		Random rand = new Random();
 		int result = rand.nextInt(totalDifficulty);
-		if (result < this.fighter1.getDifficulty()) return this.fighter1;
-		return this.fighter2;
+		if (result < fighter1.getDifficulty()) return fighter1;
+		return fighter2;
 	}
 }
 

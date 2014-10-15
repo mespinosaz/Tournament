@@ -9,12 +9,12 @@ public class Bot extends Fighter {
     protected Random randomizer = new Random();
 
     public Bot(int id, int level) {
-        this.name = createName(id);
+        name = createName(id);
         setLevel(level);
     }
 
     public Bot (int id) {
-        this.name = createName(id);
+        name = createName(id);
         setLevel(Bot.DEFAULT_LEVEL);
     }
 
@@ -30,6 +30,6 @@ public class Bot extends Fighter {
     }
 
     public void setDifficulty(int level) {
-        this.difficulty = level*20 + this.randomizer.nextInt(20) - 10;
+        difficulty = level*20 + randomizer.nextInt(20) - 10;
     }
 }

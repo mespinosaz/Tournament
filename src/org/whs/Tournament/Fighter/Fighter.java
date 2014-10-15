@@ -1,7 +1,5 @@
 package org.whs.Tournament.Fighter;
 
-import java.util.Random;
-
 abstract public class Fighter {
 	public static final int DEFAULT_DIFFICULTY = 75;
 
@@ -18,31 +16,31 @@ abstract public class Fighter {
 	protected int loses;
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public int getDifficulty() {
-		return this.difficulty;
+		return difficulty;
 	}
 
 	public int getWins() {
-		return this.wins;
+		return wins;
 	}
 
 	public int getLoses() {
-		return this.loses;
+		return loses;
 	}
 
 	public void addWin() {
-		this.wins++;
+		wins++;
 	}
 
 	public void addLose() {
-		this.loses++;
+		loses++;
 	}
 
 	public void print() {
-		System.out.println(Fighter.FIGHTER_NAME + ":\t " + this.name );
+		System.out.println(Fighter.FIGHTER_NAME + ":\t " + name );
 		System.out.println(Fighter.FIGHTER_DIFFICULTY + ":\t " + String.valueOf(getDifficulty()) + "\n");
 	}
 

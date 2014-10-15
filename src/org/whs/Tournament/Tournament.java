@@ -132,9 +132,7 @@ public class Tournament {
 	}
 
 	private void setupCombatTree() {
-		int depth = CombatTree.computeDepth(participants.size());
-		tournament = new CombatTree(depth);
-		tournament.addParticipants(participants);
+		tournament = new CombatTree(participants);
 	}
 
 	private void setupLeague() {

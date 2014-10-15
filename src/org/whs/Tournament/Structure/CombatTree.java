@@ -1,176 +1,171 @@
 package org.whs.Tournament.Structure;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.HumanFighter;
+import org.whs.Tournament.Fighter.NullFighter;
+import org.whs.Tournament.Structure.Combat.Combat;
 
-import java.net.*;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class CombatTree extends TournamentStructure {
-	public Fighter fighter = new Fighter();
-	int maxDepth = 0;
-	public CombatTree leftLeaf = null;
-	public CombatTree rightLeaf = null;
-	int label = 0;
+	public static final String FINAL_ROUND_MESSAGE = "Final Round";
+	public static final String ROUND_MESSGE = "Round";
 
-	public CombatTree() {
+	private Fighter fighter = new NullFighter();
+	private int maxDepth = 0;
+	private CombatTree leftLeaf = null;
+	private CombatTree rightLeaf = null;
+	private int label;
 
+	public CombatTree(ArrayList<Fighter> participants) {
+		setupTree(participants.size());
+		addParticipants(participants);
 	}
 
-	public CombatTree(int depth) {
-		initialize(depth,1);
-	}
-
-	public CombatTree(int depth, int horitzonalPosition) {
+	private CombatTree(int depth, int horitzonalPosition) {
 		initialize(depth,horitzonalPosition);
 	}
 
-	private void initialize (int depth, int horitzonalPosition) {
+	private void setupTree(int numberOfLeafs) {
+		maxDepth = computeDepth(numberOfLeafs);
+		initialize(maxDepth,1);
+	}
+
+	private void initialize(int depth, int horitzonalPosition) {
 		maxDepth = depth;
 		if (depth > 0) {
-			leftLeaf = new CombatTree(depth-1,horitzonalPosition);
-			rightLeaf = new CombatTree(depth-1,horitzonalPosition + (int) Math.pow(2,depth)/2);
+			setupLeafs(depth,horitzonalPosition);
 		} else {
 			label = horitzonalPosition;
 		}
 	}
 
-	public static int computeDepth(int numberOfNodes) {
+	private void setupLeafs(int depth, int horitzonalPosition) {
+		leftLeaf = new CombatTree(depth-1,horitzonalPosition);
+		rightLeaf = new CombatTree(depth-1,horitzonalPosition + (int) Math.pow(2,depth)/2);
+	}
+
+	private int computeDepth(int numberOfNodes) {
 		return (int)Math.ceil( Math.log(numberOfNodes) / Math.log(2) );
 	}
 
-	public void addParticipants(ArrayList<Fighter> participants) {
+	protected void addParticipants(ArrayList<Fighter> participants) {
+		participants = normalizeParticipants(participants);
+		addNodes(participants);
+		reverseTree();
+	}
+
+	private ArrayList<Fighter> normalizeParticipants(ArrayList<Fighter> participants) {
 		participants.ensureCapacity((int)Math.pow(2,maxDepth));
 		int numberOfParticipants = participants.size();
 		for (int i=0; i < ((int)Math.pow(2,maxDepth) - numberOfParticipants); i++) {
-			participants.add(new Fighter());
+			participants.add(new NullFighter());
 		}
-		addNodes(participants);
-		reverse();
+
+		return participants;
 	}
 
-	public CombatTree addNodes(ArrayList<Fighter> flist) {
-		int index=0;
+	private CombatTree addNodes(ArrayList<Fighter> participants) {
 		if (isLeaf()) return null;
-		if (leftLeaf.isLeaf() && rightLeaf.isLeaf()) {
-			index = (leftLeaf.label-1)/2;
-			leftLeaf.fighter = flist.get(index);
-			rightLeaf.fighter = flist.get(index + flist.size()/2);
+		if (childrenAreLeafs()) {
+			setupLeafsFighters(participants);
 		} else {
-			leftLeaf = leftLeaf.addNodes(flist);
-			rightLeaf = rightLeaf.addNodes(flist);
+			propagateParticipants(participants);
 		}
 
 		return this;
 	}
 
-	public int addNode(CombatTree c) {
-		if (leftLeaf == null) {
-			leftLeaf = c;
-			return 1;
-		}
-		if (rightLeaf == null) {
-			rightLeaf = c;
-			return 2;
-		}
-		return -1;
+	private void setupLeafsFighters(ArrayList<Fighter> participants) {
+		int index = (leftLeaf.label-1)/2;
+		leftLeaf.fighter = participants.get(index);
+		rightLeaf.fighter = participants.get(index + participants.size()/2);
 	}
 
-	public void addNode(CombatTree c, int i) {
-		switch(i) {
-			case 1: leftLeaf = c; break;
-			case 2: rightLeaf = c; break;
-		}
+	private void propagateParticipants(ArrayList<Fighter> participants) {
+		leftLeaf = leftLeaf.addNodes(participants);
+		rightLeaf = rightLeaf.addNodes(participants);
 	}
 
-	public CombatTree reverse() {
-		CombatTree aux = leftLeaf;
+	private boolean childrenAreLeafs() {
+		return leftLeaf.isLeaf() && rightLeaf.isLeaf();
+	}
+
+	private CombatTree reverseTree() {
 		if (!isLeaf()) {
-			leftLeaf = rightLeaf;
-			rightLeaf = aux;
-			leftLeaf.reverse();
-			rightLeaf.reverse();
+			switchLeafs();
+			propagateReverseTree();
 		}
 		return this;
 
+	}
+
+	private void switchLeafs() {
+		CombatTree aux = leftLeaf;
+		leftLeaf = rightLeaf;
+		rightLeaf = aux;
+	}
+
+	private void propagateReverseTree() {
+		leftLeaf.reverseTree();
+		rightLeaf.reverseTree();
 	}
 
 	public boolean isLeaf() {
-		if (leftLeaf == null & rightLeaf == null) return true;
-		return false;
-	}
-
-	public Fighter returnFighter() { //Deprecated
-		Fighter a1, a2;
-		if (leftLeaf.isLeaf()) a1 = leftLeaf.fighter;
-		else a1 = leftLeaf.returnFighter();
-		if (rightLeaf.isLeaf()) a2 = rightLeaf.fighter;
-		else a2 = rightLeaf.returnFighter();
-		return solveCombat(a1,a2);
+		return (leftLeaf == null & rightLeaf == null);
 	}
 
 	public void resolve() {
 		int round = 1;
-		while (this.fighter.getType() == 0) {
-			String msg = "";
-			if (this.leftLeaf.isLeaf() && this.rightLeaf.isLeaf()) msg = "Final Round";
-			else msg = "Round " + round;
-			this.consoleOutput.title(msg);
-			this.solveLeafCombats();
+		while (noOneWon()) {
+			resolveRound(round);
 			round++;
 		}
 	}
 
-	public Fighter getWinner() {
-		return this.fighter;
+	private String getRoundMessage(int round) {
+		if (childrenAreLeafs()) {
+			return CombatTree.FINAL_ROUND_MESSAGE;
+		}
+		return CombatTree.ROUND_MESSGE + " " + round;
 	}
 
-	public void solveLeafCombats() {
-		if (leftLeaf.isLeaf() && rightLeaf.isLeaf()) {
-			fighter = solveCombat(leftLeaf.fighter,rightLeaf.fighter);
-			leftLeaf = null;
-			rightLeaf = null;
+	private void resolveRound(int round) {
+		String msg = getRoundMessage(round);
+		consoleOutput.title(msg);
+		solveLeafCombats();
+	}
+
+	private boolean noOneWon() {
+		return fighter instanceof NullFighter;
+	}
+
+	public Fighter getWinner() {
+		return fighter;
+	}
+
+	private void solveLeafCombats() {
+		if (childrenAreLeafs()) {
+			fighter = solveCurrentNodeCombat();
+			unsetLeafs();
 		} else {
 			leftLeaf.solveLeafCombats();
 			rightLeaf.solveLeafCombats();
 		}
 	}
 
-	public Fighter solveCombat(Fighter f1, Fighter f2) {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		int x=0;
-		if (f1.getType() == 0) return f2;
-		if (f2.getType() == 0) return f1;
-		if (f1.getType() == 2 && f2.getType() == 2) return autoCombat(f1,f2);
-		try {
-			do {
-				System.out.print("\n-----------------------\n"
-					+ f1.getName() + "(" + String.valueOf(f1.getDifficulty())
-					+ ") vs. "
-					+ f2.getName() + "(" + String.valueOf(f2.getDifficulty())
-					+ ")\n-----------------------\n[ 1. " +  f1.getName() + " | 2. " + f2.getName() + " | 3.Auto ]: ");
-
-				switch(Integer.parseInt(in.readLine())) {
-					case 1: return f1;
-					case 2: return f2;
-					case 3: return autoCombat(f1,f2);
-				}
-			}
-			while (true);
-		} catch (IOException e)  {
-			e.printStackTrace();
-		}
-		return null;
+	private void unsetLeafs() {
+		leftLeaf = null;
+		rightLeaf = null;
 	}
 
-	public Fighter autoCombat(Fighter f1, Fighter f2) {
-		if (f1.getType() == 0) return f2;
-      	if (f2.getType() == 0) return f1;
-		int totalDifficulty = f1.getDifficulty() + f2.getDifficulty();
-		Random rand = new Random();
-		int result = rand.nextInt(totalDifficulty);
-		if (result < f1.getDifficulty()) return f1;
-		return f2;
+	private Fighter solveCurrentNodeCombat() {
+		Combat combat = new Combat(leftLeaf.getFighter(), rightLeaf.getFighter());
+		return combat.resolve();
+	}
+
+	public Fighter getFighter() {
+		return fighter;
 	}
 }

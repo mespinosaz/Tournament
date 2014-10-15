@@ -18,7 +18,7 @@ public class League extends TournamentStructure {
 		fighters = participants;
 	}
 
-    public void addParticipants(ArrayList<Fighter> participants) {
+    protected void addParticipants(ArrayList<Fighter> participants) {
         fighters = participants;
     }
 
@@ -48,7 +48,7 @@ public class League extends TournamentStructure {
 			System.out.println("Ronda" + Integer.toString(i+1));
 			System.out.print("----------");
 			Collections.shuffle(clist);
-			for(int j=0;j<clist.size();j++) fighters.get(fighters.indexOf(clist.get(j).solveCombat())).addWin();
+			for(int j=0;j<clist.size();j++) fighters.get(fighters.indexOf(clist.get(j).resolve())).addWin();
 		}
 		winSort(fighters,0,fighters.size()-1);
 		Collections.reverse(fighters);

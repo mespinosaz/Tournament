@@ -8,11 +8,11 @@ import java.util.ArrayList;
 abstract public class TournamentStructure extends ConsoleApplication {
     abstract public void resolve();
     abstract public Fighter getWinner();
-    abstract public void addParticipants(ArrayList<Fighter> participants);
+    abstract protected void addParticipants(ArrayList<Fighter> participants);
 
     public void revealWinner() {
         System.out.print("\n\n");
-        String winnerName = this.getWinner().getName().toUpperCase();
-        this.consoleOutput.slowText("The winner is........................... " + winnerName + "!!!!!!");
+        String winnerName = getWinner().getName().toUpperCase();
+        consoleOutput.slowText("The winner is........................... " + winnerName + "!!!!!!");
     }
 }
