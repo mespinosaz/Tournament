@@ -2,67 +2,118 @@ package org.whs.Tournament.Structure;
 
 import org.whs.Tournament.Fighter.Fighter;
 import org.whs.Tournament.Structure.Combat.Combat;
+import org.whs.Tournament.Util.UserInputReader;
 
-import java.net.*;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class League extends TournamentStructure {
-	ArrayList<Fighter> fighters;
-	Fighter winner;
-	int rounds = 1;
+    public static final int EVEN_ROUND = 0;
+    public static final int ODD_ROUND = 1;
+    public static final String WINS_MESSAGE = "Wins";
+    public static final String NUMBER_OF_ROUNDS_MESSAGE = "Number of rounds";
+
+	private ArrayList<Fighter> fighters;
+    private ArrayList<Combat> combats;
+	private Fighter winner;
+	private int numberOfRounds;
 
 	public League(ArrayList<Fighter> participants) {
-		fighters = participants;
+		addParticipants(participants);
+        initialize();
 	}
 
     protected void addParticipants(ArrayList<Fighter> participants) {
         fighters = participants;
     }
 
+    private void initialize() {
+        setupCombats();
+        captureNumberOfRounds();
+    }
+
+    private void setupCombats() {
+        int numberOfPlayersNotConfronted;
+        combats = new ArrayList<Combat>();
+        for (int i=0;i<fighters.size();i++) {
+            numberOfPlayersNotConfronted = fighters.size()-i-1;
+            for(int j=0;j<numberOfPlayersNotConfronted;j++) {
+                addCombat(fighters.get(j),fighters.get(j+i+1),j%2);
+            }
+        }
+    }
+
+    private void addCombat(Fighter fighterOne, Fighter fighterTwo, int roundType) {
+        Combat newCombat = new Combat(fighterOne,fighterTwo);
+        if (roundType == League.ODD_ROUND) {
+            newCombat.reverse();
+        }
+        combats.add(newCombat);
+    }
+
+    private void captureNumberOfRounds() {
+        UserInputReader input = new UserInputReader(League.NUMBER_OF_ROUNDS_MESSAGE);
+        input.setMessagePrepend(": ");
+        numberOfRounds = input.captureInteger();
+    }
+
 	public void resolve() {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		ArrayList<Combat> clist = new ArrayList<Combat>();
-		for (int i=0;i<fighters.size();i++) {
-			for(int j=0;j<(fighters.size()-i-1);j++) {
-				switch(j%2) {
-					case 0:
-						clist.add(new Combat(fighters.get(j),fighters.get(j+i+1)));
-						break;
-					case 1:
-						clist.add(new Combat(fighters.get(j+i+1),fighters.get(j)));
-						break;
-				}
-			}
+		for(int round=1;round<=numberOfRounds;round++) {
+            Collections.shuffle(combats);
+			printRoundMessage(round);
+			for(int combatIndex=0;combatIndex<combats.size();combatIndex++) {
+                resolveCombatFromTheList(combatIndex);
+            }
 		}
-		try {
-			System.out.print("Numero de rondas: ");
-			rounds = Integer.parseInt(in.readLine());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		for(int i=0;i<rounds;i++) {
-			System.out.println("\n----------");
-			System.out.println("Ronda" + Integer.toString(i+1));
-			System.out.print("----------");
-			Collections.shuffle(clist);
-			for(int j=0;j<clist.size();j++) fighters.get(fighters.indexOf(clist.get(j).resolve())).addWin();
-		}
-		winSort(fighters,0,fighters.size()-1);
-		Collections.reverse(fighters);
+		sortFightersByWins();
 		winner = fighters.get(0);
-		System.out.println("\n----\nWins\n----");
-		for(int n=0;n<fighters.size();n++) System.out.println(Integer.toString(n+1) + ". " + fighters.get(n).getName() + " - " + fighters.get(n).getWins());
-		System.out.println("----------");
+		drawClassification();
 	}
+
+    private void resolveCombatFromTheList(int combatIndex) {
+        Combat theCombat = combats.get(combatIndex);
+        Fighter theWinner = theCombat.resolve();
+        theWinner.addWin();
+    }
 
 	public Fighter getWinner() {
 		return winner;
 	}
 
-	public void winSort(ArrayList<Fighter> f, int first, int last){
+    private void drawClassification() {
+        consoleOutput.title(League.WINS_MESSAGE);
+        for(int n=0;n<fighters.size();n++) {
+            drawFighterPointsAtPosition(n);
+        }
+        consoleOutput.horitzontalLine(8);
+    }
+
+    private void drawFighterPointsAtPosition(int position) {
+        Fighter theFighter = getFighterAtPosition(position);
+        String msg = Integer.toString(position+1)
+            + ". "
+            + theFighter.getName()
+            + " - "
+            + theFighter.getWins();
+
+        consoleOutput.print(msg);
+    }
+
+    private Fighter getFighterAtPosition(int index) {
+        return fighters.get(index);
+    }
+
+    private void sortFightersByWins() {
+        winSort(fighters,0,fighters.size()-1);
+        Collections.reverse(fighters);
+    }
+
+    // This needs to be removed
+	public void winSort(ArrayList<Fighter> f, int first, int last) {
     	int i=first;
 		int j=last;
     	int pivote=(f.get(last).getWins()+f.get(first).getWins())/2;

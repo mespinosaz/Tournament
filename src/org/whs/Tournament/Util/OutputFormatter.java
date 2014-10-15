@@ -26,4 +26,8 @@ public class OutputFormatter {
       }
         System.out.print("\n");
     }
+
+    public void print(String msg) {
+        System.out.println(msg);
+    }
 }

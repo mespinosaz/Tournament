@@ -10,6 +10,9 @@ import java.util.*;
 
 public class Combat
 {
+	public static final int COMBAT_SLOT_ONE = 0;
+	public static final int COMBAT_SLOT_TWO = 1;
+
 	private Fighter fighter1;
 	private Fighter fighter2;
 
@@ -17,6 +20,12 @@ public class Combat
 	{
 		fighter1 = newFighter1;
 		fighter2 = newFighter2;
+	}
+
+	public void reverse() {
+		Fighter tempFighter = fighter1;
+		fighter2 = fighter1;
+		fighter1 = tempFighter;
 	}
 
 	public Fighter resolve()

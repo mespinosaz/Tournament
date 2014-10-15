@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class CombatTree extends TournamentStructure {
 	public static final String FINAL_ROUND_MESSAGE = "Final Round";
-	public static final String ROUND_MESSGE = "Round";
 
 	private Fighter fighter = new NullFighter();
 	private int maxDepth = 0;
@@ -130,21 +129,16 @@ public class CombatTree extends TournamentStructure {
 		}
 	}
 
-	private String getRoundMessage(int round) {
-		if (childrenAreLeafs()) {
-			return CombatTree.FINAL_ROUND_MESSAGE;
-		}
-		return CombatTree.ROUND_MESSGE + " " + round;
-	}
-
 	private void resolveRound(int round) {
 		printRoundMessage(round);
 		solveLeafCombats();
 	}
 
-	private void printRoundMessage(int round) {
-		String msg = getRoundMessage(round);
-		consoleOutput.title(msg);
+	protected String getRoundMessage(int round) {
+		if (childrenAreLeafs()) {
+			return CombatTree.FINAL_ROUND_MESSAGE;
+		}
+		return TournamentStructure.ROUND_MESSAGE + " " + round;
 	}
 
 	private boolean noOneWon() {
