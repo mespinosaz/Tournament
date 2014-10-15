@@ -150,8 +150,7 @@ public class CombatTree extends TournamentStructure {
 			fighter = solveCurrentNodeCombat();
 			unsetLeafs();
 		} else {
-			leftLeaf.solveLeafCombats();
-			rightLeaf.solveLeafCombats();
+			solveCurrentLeafsCombat();
 		}
 	}
 
@@ -163,6 +162,11 @@ public class CombatTree extends TournamentStructure {
 	private Fighter solveCurrentNodeCombat() {
 		Combat combat = new Combat(leftLeaf.getFighter(), rightLeaf.getFighter());
 		return combat.resolve();
+	}
+
+	private void solveCurrentLeafsCombat() {
+		leftLeaf.solveLeafCombats();
+		rightLeaf.solveLeafCombats();
 	}
 
 	public Fighter getFighter() {
