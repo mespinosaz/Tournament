@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.FighterCollection;
 import org.whs.Tournament.Fighter.RandomBot;
 import org.whs.Tournament.Structure.CombatTree;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class TestCombatTree {
     @Test
     public void testTournament() {
-        ArrayList<Fighter> participants = new ArrayList<Fighter>();
+        FighterCollection participants = new FighterCollection();
         for(int i=0;i<11;i++) {
             Fighter f = new RandomBot(i);
             participants.add(f);
