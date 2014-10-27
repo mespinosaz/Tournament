@@ -8,7 +8,6 @@ import org.whs.Tournament.Fighter.NullFighter;
 import org.whs.Tournament.Fighter.RandomBot;
 import org.whs.Tournament.Structure.Combat.Combat;
 
-
 public class TestCombat {
     @Test
     public void testCombatNull() {

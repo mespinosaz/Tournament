@@ -4,13 +4,10 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
 import org.whs.Tournament.Fighter.Fighter;
 import org.whs.Tournament.Fighter.FighterCollection;
 import org.whs.Tournament.Fighter.RandomBot;
 import org.whs.Tournament.Structure.League;
-
-import java.util.ArrayList;
 
 public class TestLeague {
     @Test
