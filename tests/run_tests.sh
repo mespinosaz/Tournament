@@ -1,6 +1,6 @@
 #!/bin/bash
 
-javac -cp .:../src/ TestFighter.java TestRunner.java
+javac -cp .:../src/ *.java
 
 if [ $? -ne 0 ]
 then

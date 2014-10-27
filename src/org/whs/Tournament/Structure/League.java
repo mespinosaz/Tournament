@@ -1,6 +1,7 @@
 package org.whs.Tournament.Structure;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.FighterCollection;
 import org.whs.Tournament.Structure.Combat.Combat;
 import org.whs.Tournament.Util.UserInputReader;
 
@@ -13,17 +14,17 @@ public class League extends TournamentStructure {
     public static final String WINS_MESSAGE = "Wins";
     public static final String NUMBER_OF_ROUNDS_MESSAGE = "Number of rounds";
 
-	private ArrayList<Fighter> fighters;
+	private FighterCollection fighters;
     private ArrayList<Combat> combats;
 	private Fighter winner;
 	private int numberOfRounds;
 
-	public League(ArrayList<Fighter> participants) {
+	public League(FighterCollection participants) {
 		addParticipants(participants);
         initialize();
 	}
 
-    protected void addParticipants(ArrayList<Fighter> participants) {
+    protected void addParticipants(FighterCollection participants) {
         fighters = participants;
     }
 
@@ -105,11 +106,11 @@ public class League extends TournamentStructure {
 
     private void sortFightersByWins() {
         winSort(fighters,0,fighters.size()-1);
-        Collections.reverse(fighters);
+        fighters.reverse();
     }
 
     // This needs to be removed
-	public void winSort(ArrayList<Fighter> f, int first, int last) {
+	public void winSort(FighterCollection f, int first, int last) {
     	int i=first;
 		int j=last;
     	int pivote=(f.get(last).getWins()+f.get(first).getWins())/2;

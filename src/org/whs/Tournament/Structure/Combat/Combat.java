@@ -1,80 +1,102 @@
 package org.whs.Tournament.Structure.Combat;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.HumanFighter;
+import org.whs.Tournament.Fighter.NullFighter;
+import org.whs.Tournament.Util.ConsoleApplication;
+import org.whs.Tournament.Util.UserInputReader;
 
-import java.net.*;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.util.Random;
 
-
-public class Combat
-{
+public class Combat extends ConsoleApplication {
 	public static final int COMBAT_SLOT_ONE = 0;
 	public static final int COMBAT_SLOT_TWO = 1;
 
-	private Fighter fighter1;
-	private Fighter fighter2;
+	private Fighter fighterOne;
+	private Fighter fighterTwo;
 
-	public Combat(Fighter newFighter1, Fighter newFighter2)
-	{
-		fighter1 = newFighter1;
-		fighter2 = newFighter2;
+	public Combat(Fighter newfighterOne, Fighter newfighterTwo) {
+		fighterOne = newfighterOne;
+		fighterTwo = newfighterTwo;
 	}
 
 	public void reverse() {
-		Fighter tempFighter = fighter1;
-		fighter2 = fighter1;
-		fighter1 = tempFighter;
+		Fighter tempFighter = fighterOne;
+		fighterTwo = fighterOne;
+		fighterOne = tempFighter;
 	}
 
-	public Fighter resolve()
-	{
-		if (fighter1.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
-			return fighter2;
+	public Fighter resolve() {
+		if (fightersAreNotHumanOrOneIsEmpty()) {
+			return solveCombatAutomatically();
 		}
 
-		if (fighter2.getType() == Fighter.FIGHTER_TYPE_EMPTY) {
-			return fighter1;
-		}
-		if (fighter1.getType() == Fighter.FIGHTER_TYPE_BOT
-			&& fighter2.getType() == Fighter.FIGHTER_TYPE_BOT) {
-			return autoCombat();
-		}
+		return solveCombat();
+	}
 
-		try {
+	private Fighter solveCombat() {
+		showCombat();
+		return captureWinner();
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	}
+	private void showCombat() {
+		String title = fighterOne.getName()
+			+ "("
+			+ String.valueOf(fighterOne.getDifficulty())
+			+ ") vs. "
+			+ fighterTwo.getName()
+			+ "("
+			+ String.valueOf(fighterTwo.getDifficulty())
+			+ ")";
+		consoleOutput.title(title);
+	}
 
-			do {
-
-				System.out.print("\n-----------------------\n"
-					+ fighter1.getName() + "(" + String.valueOf(fighter1.getDifficulty())
-					+ ") vs. "
-					+ fighter2.getName() + "(" + String.valueOf(fighter2.getDifficulty())
-					+ ")\n-----------------------\n[ 1. " +  fighter1.getName() + " | 2. " + fighter2.getName() + " | 3.Auto ]: ");
-
-				switch(Integer.parseInt(in.readLine())) {
-					case 1: return fighter1;
-					case 2: return fighter2;
-					case 3: return autoCombat();
-				}
+	private Fighter captureWinner() {
+		String options = "[ 1. " +  fighterOne.getName()
+			+ " | 2. " + fighterTwo.getName()
+			+ " | 3.Auto ]";
+		UserInputReader input = new UserInputReader(options);
+		int option;
+		do {
+        	input.setMessagePrepend(": ");
+	    	option = input.captureInteger();
+			switch(option) {
+				case 1: return fighterOne;
+				case 2: return fighterTwo;
+				case 3: return solveCombatAutomatically();
 			}
-			while (true);
-		} catch (IOException e)  {
-			e.printStackTrace();
 		}
-		return null;
+		while (true);
 	}
 
-	public Fighter autoCombat() {
-		if (fighter1.getType() == 0) return fighter2;
-      	if (fighter2.getType() == 0) return fighter1;
-		int totalDifficulty = fighter1.getDifficulty() + fighter2.getDifficulty();
+	private boolean fightersAreNotHumanOrOneIsEmpty() {
+		return fightersAreNotHuman() ||
+			isAtleastOneFighterEmpty();
+	}
+
+	private boolean fightersAreNotHuman() {
+		return !(fighterOne instanceof HumanFighter)
+			&& !(fighterTwo instanceof HumanFighter);
+	}
+
+	private boolean isAtleastOneFighterEmpty() {
+		return fighterOne instanceof NullFighter
+			|| fighterTwo instanceof NullFighter;
+	}
+
+	private Fighter solveCombatAutomatically() {
+		if (fighterOne instanceof NullFighter) return fighterTwo;
+      	if (fighterTwo instanceof NullFighter) return fighterOne;
+
+		return getWinnerBasedOnDifficulty();
+	}
+
+	private Fighter getWinnerBasedOnDifficulty() {
+		int totalDifficulty = fighterOne.getDifficulty() + fighterTwo.getDifficulty();
 		Random rand = new Random();
 		int result = rand.nextInt(totalDifficulty);
-		if (result < fighter1.getDifficulty()) return fighter1;
-		return fighter2;
+		if (result < fighterOne.getDifficulty()) return fighterOne;
+		return fighterTwo;
 	}
 }
 

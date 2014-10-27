@@ -1,6 +1,7 @@
 package org.whs.Tournament;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.FighterCollection;
 import org.whs.Tournament.Fighter.HumanFighter;
 import org.whs.Tournament.Fighter.RandomBot;
 import org.whs.Tournament.Structure.TournamentStructure;
@@ -25,7 +26,7 @@ public class Tournament {
 				+ "---------\n"
 				+ "<1/2>";
 
-	private ArrayList<Fighter> participants = new ArrayList<Fighter>();
+	private FighterCollection participants = new FighterCollection();
 	private int numberOfParticipants = 0;
 	private int numberOfHumanPlayers = 0;
 	private int tournamentType;
@@ -43,7 +44,7 @@ public class Tournament {
 	private void setupParticipants() {
 		processUserInput();
 		fillSpotsLeftWithBots();
-		Collections.shuffle(participants);
+		participants.shuffle();
 	}
 
 	private void processUserInput() {
@@ -73,7 +74,7 @@ public class Tournament {
 
 	private void processNumberOfParticipants() {
 		captureNumberOfParticipants();
-		participants = new ArrayList<Fighter>(numberOfParticipants);
+		participants = new FighterCollection(numberOfParticipants);
 	}
 
 	private void captureNumberOfParticipants() {

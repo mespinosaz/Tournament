@@ -1,11 +1,11 @@
 package org.whs.Tournament.Structure;
 
 import org.whs.Tournament.Fighter.Fighter;
+import org.whs.Tournament.Fighter.FighterCollection;
 import org.whs.Tournament.Fighter.HumanFighter;
 import org.whs.Tournament.Fighter.NullFighter;
 import org.whs.Tournament.Structure.Combat.Combat;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class CombatTree extends TournamentStructure {
@@ -17,7 +17,7 @@ public class CombatTree extends TournamentStructure {
 	private CombatTree rightLeaf = null;
 	private int label;
 
-	public CombatTree(ArrayList<Fighter> participants) {
+	public CombatTree(FighterCollection participants) {
 		setupTree(participants.size());
 		addParticipants(participants);
 	}
@@ -49,20 +49,20 @@ public class CombatTree extends TournamentStructure {
 		return (int)Math.ceil( Math.log(numberOfNodes) / Math.log(2) );
 	}
 
-	protected void addParticipants(ArrayList<Fighter> participants) {
+	protected void addParticipants(FighterCollection participants) {
 		participants = normalizeParticipants(participants);
 		addNodes(participants);
 		reverseTree();
 	}
 
-	private ArrayList<Fighter> normalizeParticipants(ArrayList<Fighter> participants) {
+	private FighterCollection normalizeParticipants(FighterCollection participants) {
 		participants.ensureCapacity((int)Math.pow(2,maxDepth));
 		participants = fillSpotsWithEmptyValues(participants);
 
 		return participants;
 	}
 
-	private ArrayList<Fighter> fillSpotsWithEmptyValues(ArrayList<Fighter> participants) {
+	private FighterCollection fillSpotsWithEmptyValues(FighterCollection participants) {
 		int numberOfParticipants = participants.size();
 		for (int i=0; i < ((int)Math.pow(2,maxDepth) - numberOfParticipants); i++) {
 			participants.add(new NullFighter());
@@ -71,7 +71,7 @@ public class CombatTree extends TournamentStructure {
 		return participants;
 	}
 
-	private CombatTree addNodes(ArrayList<Fighter> participants) {
+	private CombatTree addNodes(FighterCollection participants) {
 		if (isLeaf()) return null;
 		if (childrenAreLeafs()) {
 			setupLeafsFighters(participants);
@@ -82,7 +82,7 @@ public class CombatTree extends TournamentStructure {
 		return this;
 	}
 
-	private void setupLeafsFighters(ArrayList<Fighter> participants) {
+	private void setupLeafsFighters(FighterCollection participants) {
 		int index = (leftLeaf.label-1)/2;
 		Fighter leftFighter = participants.get(index);
 		Fighter rightFighter = participants.get(index + participants.size()/2);
@@ -94,7 +94,7 @@ public class CombatTree extends TournamentStructure {
 		fighter = theFighter;
 	}
 
-	private void propagateParticipants(ArrayList<Fighter> participants) {
+	private void propagateParticipants(FighterCollection participants) {
 		leftLeaf = leftLeaf.addNodes(participants);
 		rightLeaf = rightLeaf.addNodes(participants);
 	}

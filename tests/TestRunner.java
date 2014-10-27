@@ -7,7 +7,8 @@ public class TestRunner {
         Result result = JUnitCore.runClasses(
             TestFighter.class,
             TestCombatTree.class,
-            TestLeague.class
+            TestLeague.class,
+            TestCombat.class
         );
         for (Failure failure : result.getFailures()) {
             System.out.println(failure.getTrace());
